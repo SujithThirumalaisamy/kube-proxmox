@@ -1,0 +1,33 @@
+---
+k8s_version: "1.29"
+
+container_runtime: containerd # Supported options: containerd, docker
+
+cluster_name: "k8s-production"
+
+# IMPORTANT: Ensure these CIDRs don't overlap with each other or your node network
+
+pod_network_cidr: "10.244.0.0/16"
+service_cidr: "10.96.0.0/12"
+cluster_dns: "10.96.0.10"
+
+# For HA clusters: Use a load balancer VIP or the first master IP
+# Format: "<IP>:<PORT>"
+control_plane_endpoint: "192.168.1.101:6443"
+
+# API server port (typically 6443)
+api_server_port: 6443
+
+# Supported: calico, flannel
+cni_plugin: calico
+
+# Swap must be disabled for Kubernetes
+disable_swap: true
+
+# Required system packages (do not modify unless necessary)
+required_packages:
+  - apt-transport-https
+  - ca-certificates
+  - curl
+  - gnupg
+  - lsb-release

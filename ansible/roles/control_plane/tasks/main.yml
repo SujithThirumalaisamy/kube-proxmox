@@ -1,0 +1,33 @@
+---
+# Control plane join tasks - for secondary master nodes
+
+- name: Check if node is already part of cluster
+  stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: kubelet_conf
+
+- name: Read control-plane join command
+  set_fact:
+    kubeadm_join_command: "{{ lookup('file', playbook_dir + '/control_plane_join_command.sh') }}"
+  when: not kubelet_conf.stat.exists
+
+- name: Join as control-plane node
+  command: "{{ kubeadm_join_command }}"
+  when: not kubelet_conf.stat.exists
+
+- name: Create .kube directory for user
+  file:
+    path: "/home/{{ ansible_user }}/.kube"
+    state: directory
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0755"
+
+- name: Copy admin.conf to user's kube config
+  copy:
+    src: /etc/kubernetes/admin.conf
+    dest: "/home/{{ ansible_user }}/.kube/config"
+    remote_src: yes
+    owner: "{{ ansible_user }}"
+    group: "{{ ansible_user }}"
+    mode: "0600"

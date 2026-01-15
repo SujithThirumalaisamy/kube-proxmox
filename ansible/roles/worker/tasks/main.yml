@@ -1,0 +1,16 @@
+---
+# Worker node specific tasks
+
+- name: Check if node is already joined
+  stat:
+    path: /etc/kubernetes/kubelet.conf
+  register: kubelet_conf
+
+- name: Read join command
+  set_fact:
+    kubeadm_join_command: "{{ lookup('file', playbook_dir + '/join_command.sh') }}"
+  when: not kubelet_conf.stat.exists
+
+- name: Join worker to cluster
+  command: "{{ kubeadm_join_command }}"
+  when: not kubelet_conf.stat.exists

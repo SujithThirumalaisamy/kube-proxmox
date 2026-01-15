@@ -1,0 +1,31 @@
+---
+all:
+  children:
+    k8s_cluster:
+      children:
+        # Kubernetes Control Plane Nodes
+        # First master (masters[0]) initializes the cluster
+        # Additional masters join as control-plane nodes
+        masters:
+          hosts:
+            k8s-master-1:
+              ansible_host: 192.168.1.101
+            k8s-master-2:
+              ansible_host: 192.168.1.102
+
+        # Kubernetes Worker Nodes
+        workers:
+          hosts:
+            k8s-worker-1:
+              ansible_host: 192.168.1.111
+            k8s-worker-2:
+              ansible_host: 192.168.1.112
+            k8s-worker-3:
+              ansible_host: 192.168.1.113
+
+  # Global Variables
+  vars:
+    # SSH connection settings
+    ansible_user: ubuntu                              # Cloud-init username
+    ansible_ssh_private_key_file: ~/.ssh/id_ed25519  # Path to SSH private key
+    ansible_python_interpreter: /usr/bin/python3     # Python interpreter path

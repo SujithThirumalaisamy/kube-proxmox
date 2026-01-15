@@ -1,0 +1,6 @@
+# Temporary join command files (generated during playbook run)
+join_command.sh
+control_plane_join_command.sh
+
+# Ansible retry files
+*.retry

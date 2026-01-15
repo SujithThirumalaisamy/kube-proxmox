@@ -1,0 +1,80 @@
+# Proxmox Infrastructure Settings
+template   = "ubuntu-2204-cloudinit"   # Name of your cloud-init template
+storage    = "local-lvm"               # Storage pool for VM disks
+bridge     = "vmbr0"                   # Network bridge name
+gateway    = "192.168.1.1"             # Default gateway for VMs
+nameserver = "192.168.1.1"             # DNS server
+cpu_type   = "host"                    # CPU type (host, x86-64-v2, etc.)
+bios       = "seabios"                 # BIOS type (seabios or ovmf for UEFI)
+
+# VM Definitions
+# -----------------------------------------------------------------------------
+# Define your cluster VMs here. Each VM requires:
+#   - vmid: Unique VM ID in Proxmox
+#   - ip: Static IP with CIDR notation
+#   - target_node: Proxmox node to deploy on
+#   - cores: Number of CPU cores
+#   - memory: RAM in MB
+#   - disk_size: Root disk size
+#   - tags: Comma-separated tags for organization
+#   - description: VM description
+# -----------------------------------------------------------------------------
+
+vms = {
+  # Kubernetes Control Plane Nodes
+  "k8s-master-1" = {
+    vmid        = 3001
+    ip          = "192.168.1.101/24"
+    target_node = "pve1"
+    cores       = 2
+    memory      = 4096
+    disk_size   = "32G"
+    tags        = "kubernetes,master,production"
+    description = "Kubernetes Control Plane Node 1"
+  }
+
+  "k8s-master-2" = {
+    vmid        = 3002
+    ip          = "192.168.1.102/24"
+    target_node = "pve1"
+    cores       = 2
+    memory      = 4096
+    disk_size   = "32G"
+    tags        = "kubernetes,master,production"
+    description = "Kubernetes Control Plane Node 2"
+  }
+
+  # Kubernetes Worker Nodes
+  "k8s-worker-1" = {
+    vmid        = 3011
+    ip          = "192.168.1.111/24"
+    target_node = "pve1"
+    cores       = 4
+    memory      = 8192
+    disk_size   = "64G"
+    tags        = "kubernetes,worker,production"
+    description = "Kubernetes Worker Node 1"
+  }
+
+  "k8s-worker-2" = {
+    vmid        = 3012
+    ip          = "192.168.1.112/24"
+    target_node = "pve1"
+    cores       = 4
+    memory      = 8192
+    disk_size   = "64G"
+    tags        = "kubernetes,worker,production"
+    description = "Kubernetes Worker Node 2"
+  }
+
+  "k8s-worker-3" = {
+    vmid        = 3013
+    ip          = "192.168.1.113/24"
+    target_node = "pve1"
+    cores       = 4
+    memory      = 8192
+    disk_size   = "64G"
+    tags        = "kubernetes,worker,production"
+    description = "Kubernetes Worker Node 3"
+  }
+}

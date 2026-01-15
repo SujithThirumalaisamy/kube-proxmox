@@ -1,0 +1,55 @@
+---
+# Main playbook for Kubernetes cluster setup
+
+- name: Prepare all nodes
+  hosts: k8s_cluster
+  become: true
+  roles:
+    - common
+
+- name: Initialize first master node
+  hosts: masters[0]
+  become: true
+  roles:
+    - master
+
+- name: Join secondary masters as control-plane nodes
+  hosts: masters[1:]
+  become: true
+  serial: 1
+  roles:
+    - control_plane
+
+- name: Configure worker nodes
+  hosts: workers
+  become: true
+  roles:
+    - worker
+
+- name: Verify cluster status
+  hosts: masters[0]
+  become: true
+  tasks:
+    - name: Get cluster nodes
+      become_user: "{{ ansible_user }}"
+      command: kubectl get nodes
+      register: cluster_nodes
+
+    - name: Display cluster nodes
+      debug:
+        var: cluster_nodes.stdout_lines
+
+- name: Cleanup local join command files
+  hosts: localhost
+  connection: local
+  gather_facts: false
+  tasks:
+    - name: Remove worker join command file
+      file:
+        path: "{{ playbook_dir }}/join_command.sh"
+        state: absent
+
+    - name: Remove control-plane join command file
+      file:
+        path: "{{ playbook_dir }}/control_plane_join_command.sh"
+        state: absent

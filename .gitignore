@@ -1,0 +1,90 @@
+# ===================
+# Terraform
+# ===================
+
+# State files (contain sensitive infrastructure data)
+*.tfstate
+*.tfstate.*
+.terraform/
+.terraform.lock.hcl
+
+# Variables files (may contain secrets)
+*.auto.tfvars
+terraform.tfvars
+
+# Keep example files
+!terraform.tfvars.example
+!credentials.auto.tfvars.example
+
+# Crash log files
+crash.log
+crash.*.log
+
+# Override files
+override.tf
+override.tf.json
+*_override.tf
+*_override.tf.json
+
+# Plan files
+*.tfplan
+
+# ===================
+# Ansible
+# ===================
+
+# User config files (created from .example templates)
+ansible/inventory/hosts.yml
+ansible/group_vars/all.yml
+
+# Kubernetes join tokens (generated during cluster init)
+ansible/join_command.sh
+ansible/control_plane_join_command.sh
+join_command.sh
+control_plane_join_command.sh
+
+# Fetched kubeconfig (generated during cluster init)
+ansible/kubeconfig
+
+# Ansible retry files
+*.retry
+
+# Ansible vault password files
+.vault_pass
+.vault_password
+vault_password_file
+
+# ===================
+# Kubernetes
+# ===================
+
+# Kubeconfig files
+kubeconfig
+*.kubeconfig
+admin.conf
+
+# ===================
+# SSH Keys
+# ===================
+
+# Private keys (never commit these)
+*.pem
+id_rsa
+id_ed25519
+id_ecdsa
+
+# ===================
+# IDE and Editor
+# ===================
+.idea/
+.vscode/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# ===================
+# Logs
+# ===================
+*.log
+logs/
