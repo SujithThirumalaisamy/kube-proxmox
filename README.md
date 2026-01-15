@@ -179,14 +179,15 @@ The script will:
 
 ```hcl
 vms = {
-  "master-1" = {
-    vmid     = 3001
-    ip       = "10.0.96.1/24"
-    cores    = 2
-    memory   = 4096
-    disk     = "32G"
-    target   = "pve1"
-    tags     = "kubernetes,master"
+  "k8s-master-1" = {
+    vmid        = 3001
+    ip          = "192.168.0.101/24"
+    target_node = "pve"
+    cores       = 2
+    memory      = 4096
+    disk_size   = "32G"
+    tags        = "kubernetes,master"
+    description = "Kubernetes Control Plane Node 1"
   }
   # ... more VMs
 }
@@ -194,28 +195,28 @@ vms = {
 
 ### Ansible Variables (group_vars/all.yml)
 
-| Variable                 | Description                 | Default        |
-| ------------------------ | --------------------------- | -------------- |
-| `k8s_version`            | Kubernetes version          | `1.35`         |
-| `container_runtime`      | Container runtime           | `containerd`   |
-| `pod_network_cidr`       | Pod network CIDR            | `10.16.0.0/16` |
-| `service_cidr`           | Service network CIDR        | `10.32.0.0/12` |
-| `cluster_dns`            | Cluster DNS IP              | `10.64.0.10`   |
-| `cluster_name`           | Kubernetes cluster name     | `k8s-cluster`  |
-| `cni_plugin`             | CNI plugin (calico/flannel) | `calico`       |
-| `api_server_port`        | API server port             | `6443`         |
-| `control_plane_endpoint` | Control plane endpoint      | -              |
-| `disable_swap`           | Disable swap on nodes       | `true`         |
+| Variable                 | Description                 | Default          |
+| ------------------------ | --------------------------- | ---------------- |
+| `k8s_version`            | Kubernetes version          | `1.29`           |
+| `container_runtime`      | Container runtime           | `containerd`     |
+| `pod_network_cidr`       | Pod network CIDR            | `10.244.0.0/16`  |
+| `service_cidr`           | Service network CIDR        | `10.96.0.0/12`   |
+| `cluster_dns`            | Cluster DNS IP              | `10.96.0.10`     |
+| `cluster_name`           | Kubernetes cluster name     | `k8s-production` |
+| `cni_plugin`             | CNI plugin (calico/flannel) | `calico`         |
+| `api_server_port`        | API server port             | `6443`           |
+| `control_plane_endpoint` | Control plane endpoint      | -                |
+| `disable_swap`           | Disable swap on nodes       | `true`           |
 
 ## Network Planning
 
 When configuring your cluster, ensure these network ranges don't overlap:
 
-| Network         | Purpose             | Example        |
-| --------------- | ------------------- | -------------- |
-| Node Network    | VM IP addresses     | `10.0.96.0/24` |
-| Pod Network     | Kubernetes pods     | `10.16.0.0/16` |
-| Service Network | Kubernetes services | `10.32.0.0/12` |
+| Network         | Purpose             | Example           |
+| --------------- | ------------------- | ----------------- |
+| Node Network    | VM IP addresses     | `192.168.0.0/24`  |
+| Pod Network     | Kubernetes pods     | `10.244.0.0/16`   |
+| Service Network | Kubernetes services | `10.96.0.0/12`    |
 
 ## Security Considerations
 
@@ -267,14 +268,15 @@ provider "proxmox" {
 ```hcl
 vms = {
   # ... existing VMs
-  "worker-4" = {
-    vmid   = 3014
-    ip     = "10.0.96.14/24"
-    cores  = 4
-    memory = 8192
-    disk   = "64G"
-    target = "pve1"
-    tags   = "kubernetes,worker"
+  "k8s-worker-4" = {
+    vmid        = 3014
+    ip          = "192.168.0.114/24"
+    target_node = "pve"
+    cores       = 2
+    memory      = 4096
+    disk_size   = "32G"
+    tags        = "kubernetes,worker"
+    description = "Kubernetes Worker Node 4"
   }
 }
 ```

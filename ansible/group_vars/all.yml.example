@@ -13,7 +13,7 @@ cluster_dns: "10.96.0.10"
 
 # For HA clusters: Use a load balancer VIP or the first master IP
 # Format: "<IP>:<PORT>"
-control_plane_endpoint: "192.168.1.101:6443"
+control_plane_endpoint: "192.168.0.101:6443"
 
 # API server port (typically 6443)
 api_server_port: 6443
